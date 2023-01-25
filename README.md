@@ -20,7 +20,7 @@
 + IDE : `Visual Studio`, `Atom`
 
 ## 📷 스크린샷
-### 2020
+### 📅 2020
 <div align="left">
   <img width="30%" height="30%" src="https://user-images.githubusercontent.com/60832219/214594295-be59ed39-b4cf-46c2-adf4-48f14e409690.png"/>
   <img width="30%" height="30%" src="https://user-images.githubusercontent.com/60832219/214594305-2b5660eb-919e-4c64-a648-da40ebbcaf9e.png"/>
@@ -30,7 +30,7 @@
   <img width="30%" height="30%" src="https://user-images.githubusercontent.com/60832219/214594315-e06fde74-00d8-46d6-aa5a-4dcf3776c62b.png"/>
 </div>
 
-### 2021
+### 📅 2021
 <div align="left">
   <img width="30%" height="30%" src="https://user-images.githubusercontent.com/60832219/214594319-33a257e3-052f-43f8-89a6-e67f20213dc7.png"/>
   <img width="30%" height="30%" src="https://user-images.githubusercontent.com/60832219/214594320-87b47312-62ed-4d80-b576-32fda634a185.png"/>
@@ -40,7 +40,7 @@
   <img width="30%" height="30%" src="https://user-images.githubusercontent.com/60832219/214594331-45a18cf6-f5a8-4017-9215-17826ad6e882.png"/>
 </div>
 
-### 2022
+### 📅 2022
 <div align="left">
   <img width="30%" height="30%" src="https://user-images.githubusercontent.com/60832219/214594337-52fe72f2-e491-4d72-bc72-a85ad5255420.png"/>
   <img width="30%" height="30%" src="https://user-images.githubusercontent.com/60832219/214594339-104d092f-32b8-4711-8c0f-3dd268206fb1.png"/>
@@ -50,7 +50,7 @@
   <img width="30%" height="30%" src="https://user-images.githubusercontent.com/60832219/214594352-6a5633f3-5fb3-4d57-8ea7-bcbeca891780.png"/>
 </div>
 
-### 2023
+### 📅 2023
 <div align="left">
   <img width="30%" height="30%" src="https://user-images.githubusercontent.com/60832219/214594359-b0ccb875-4f0b-45d8-8272-35cdc159e5d9.png"/>
   <img width="30%" height="30%" src="https://user-images.githubusercontent.com/60832219/214594362-792574b7-43ea-46e1-b123-b605d91aab21.png"/>
@@ -58,3 +58,13 @@
   <img width="30%" height="30%" src="https://user-images.githubusercontent.com/60832219/214594366-037e616d-a32c-40e6-a70b-a38e7cbbf9ed.png"/>
   <img width="30%" height="30%" src="https://user-images.githubusercontent.com/60832219/214594370-fc8c6834-fc15-499b-9667-829199203c09.png"/>
 </div>
+
+## 📋 주요 개발
++ **셰이더 그래프**를 활용한 자동차 재질 및 배경 구현
++ **에셋 번들**로 프리팹을 서버로부터 불러올 수 있도록 구현
++ **Color Picker**로 색상 및 재질 변경 모듈 구현
++ **차량 선택** UI 구현
++ **라이트 On/Off** 모듈 구현
++ **차고 조절** 기능 구현
++ **옵션**(렌더 스케일, 해상도, 프레임, 민감도) UI 구현
++ 최적화 적용(TextMeshPro, Atlas, Batches, Low Poly, Scripting 등)
