@@ -67,4 +67,4 @@
 + **라이트 On/Off** 모듈 구현
 + **차고 조절** 기능 구현
 + **옵션**(렌더 스케일, 해상도, 프레임, 민감도) UI 구현
-+ 최적화 적용(TextMeshPro, Atlas, Batches, Low Poly, Scripting 등)
++ 최적화 적용(TextMeshPro, Atlas, Batches, Low Poly, Scripting, ...)
