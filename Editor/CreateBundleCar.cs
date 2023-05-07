@@ -10,7 +10,6 @@ public class CreateBundleCar : EditorWindow
 {
     [Header("Definition")]
     private readonly float spaceHeight = 10f;
-    private readonly string configJsonName = "CreateBundleCarConfig";
     private readonly Color mainLabelColor = new Color(0.4f, 0.4f, 0f);
     private readonly string viewPointCameraName = "Camera (View Point)";
 
@@ -236,8 +235,10 @@ public class CreateBundleCar : EditorWindow
         public string[] partNamesKOR = new string[0];
 
         [Header("08. Camera View Point Utility")]
+        public bool setMultiple;
         public float positionMultiple;
         public float rotationMultiple;
+        public bool createViewPointCamera;
     }
 
     [MenuItem("Custom/Create Bundle Car")]
@@ -263,15 +264,20 @@ public class CreateBundleCar : EditorWindow
         scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
 
         ColorLabelField("01. Set Car Prefab", EditorStyles.boldLabel, mainLabelColor);
+        ++EditorGUI.indentLevel;
         jsonVar.carPrefab = (GameObject)EditorGUILayout.ObjectField("Car Prefab", jsonVar.carPrefab, typeof(GameObject), true);
+        --EditorGUI.indentLevel;
         EditorGUILayout.Space(spaceHeight);
 
         ColorLabelField("02. Create Paint Infos", EditorStyles.boldLabel, mainLabelColor);
+        ++EditorGUI.indentLevel;
         jsonVar.paintInfosName = EditorGUILayout.TextField("Paint Infos Name", jsonVar.paintInfosName);
         if (GUILayout.Button("Create Paint Infos")) CreatePaintInfos();
+        --EditorGUI.indentLevel;
         EditorGUILayout.Space(spaceHeight);
 
         ColorLabelField("03. Add Car Manager", EditorStyles.boldLabel, mainLabelColor);
+        ++EditorGUI.indentLevel;
         jsonVar.heightRange = EditorGUILayout.Vector2Field("Height Range", jsonVar.heightRange);
         jsonVar.camberAngleRange = EditorGUILayout.Vector2Field("Camber Angle Range", jsonVar.camberAngleRange);
         jsonVar.wheelProtrusionRange = EditorGUILayout.Vector2Field("Wheel Protrusion Range", jsonVar.wheelProtrusionRange);
@@ -289,27 +295,41 @@ public class CreateBundleCar : EditorWindow
         EditorGUILayout.Space();
         jsonVar.lightProperty = EditorGUILayout.TextField("Light Property", jsonVar.lightProperty);
         if (GUILayout.Button("Add Car Manager")) AddCarManager();
+        --EditorGUI.indentLevel;
         EditorGUILayout.Space(spaceHeight);
 
         ColorLabelField("04. Change Wheel Transforms", EditorStyles.boldLabel, mainLabelColor);
+        ++EditorGUI.indentLevel;
         if (GUILayout.Button("Change Wheel Transforms")) ChangeWheelTransforms();
+        --EditorGUI.indentLevel;
         EditorGUILayout.Space(spaceHeight);
 
+
         ColorLabelField("05. Create Blob Shadow", EditorStyles.boldLabel, mainLabelColor);
+        ++EditorGUI.indentLevel;
         jsonVar.blobShadow = (GameObject)EditorGUILayout.ObjectField("Blow Shadow", jsonVar.blobShadow, typeof(GameObject), true);
         jsonVar.blobShadowPosition = EditorGUILayout.Vector3Field("Blob Shadow Position", jsonVar.blobShadowPosition);
         jsonVar.blobShadowRotation = EditorGUILayout.Vector3Field("Blob Shadow Rotation", jsonVar.blobShadowRotation);
         jsonVar.blobShadowScale = EditorGUILayout.Vector3Field("Blob Shadow Scale", jsonVar.blobShadowScale);
         if (GUILayout.Button("Create Blob Shadow")) CreateBlobShadow();
+        --EditorGUI.indentLevel;
         EditorGUILayout.Space(spaceHeight);
 
         ColorLabelField("06. Create Paint Info Objects", EditorStyles.boldLabel, mainLabelColor);
-        jsonVar.enableSelectionObjects = EditorGUILayout.Toggle("□ Enable Selection Objects", jsonVar.enableSelectionObjects);
-        if (jsonVar.enableSelectionObjects) OnGUISelectionObjects();
+        ++EditorGUI.indentLevel;
+        jsonVar.enableSelectionObjects = EditorGUILayout.Foldout(jsonVar.enableSelectionObjects, "Selection Objects", true);
+        if (jsonVar.enableSelectionObjects)
+        {
+            ++EditorGUI.indentLevel;
+            for (int i = 0, l = Selection.objects.Length; i < l; ++i) EditorGUILayout.LabelField(string.Format(" {0:00} : {1}", i, Selection.objects[i].name), EditorStyles.largeLabel);
+            --EditorGUI.indentLevel;
+        }
         if (GUILayout.Button("Create Paint Info Objects")) CreatePaintInfoObjects();
+        --EditorGUI.indentLevel;
         EditorGUILayout.Space(spaceHeight);
 
         ColorLabelField("07. Add Paint Info", EditorStyles.boldLabel, mainLabelColor);
+        ++EditorGUI.indentLevel;
         GUILayout.BeginHorizontal();
         if (GUILayout.Button("<")) ChangeSelectedPaintInfoObject(false);
         if (GUILayout.Button(">")) ChangeSelectedPaintInfoObject(true);
@@ -318,30 +338,47 @@ public class CreateBundleCar : EditorWindow
         GUILayout.EndHorizontal();
         jsonVar.selectedPaintInfo = GUILayout.Toolbar(jsonVar.selectedPaintInfo, Enum.GetNames(typeof(PaintPanel)));
         if (GUILayout.Button("Add Paint Info")) AddPaintInfo((PaintPanel)jsonVar.selectedPaintInfo);
-        jsonVar.enablePaintInfo = EditorGUILayout.Toggle("□ Enable Paint Info", jsonVar.enablePaintInfo);
+        jsonVar.enablePaintInfo = EditorGUILayout.Foldout(jsonVar.enablePaintInfo, "Paint Info", true);
         EditorGUILayout.Space();
-        if (jsonVar.enablePaintInfo) OnGUIPaintInfo((PaintPanel)jsonVar.selectedPaintInfo);
+        if (jsonVar.enablePaintInfo)
+        {
+            ++EditorGUI.indentLevel;
+            OnGUIPaintInfo((PaintPanel)jsonVar.selectedPaintInfo);
+            --EditorGUI.indentLevel;
+        }
+        --EditorGUI.indentLevel;
         EditorGUILayout.Space(spaceHeight);
 
         ColorLabelField("07-A. Define Part Name", EditorStyles.boldLabel, new Color(0.2f, 0.2f, 0f));
-        jsonVar.enablePartName = EditorGUILayout.Toggle("□ Enable Part Name", jsonVar.enablePartName);
-        if (jsonVar.enablePartName) OnGUIPartName();
+        ++EditorGUI.indentLevel;
+        jsonVar.enablePartName = EditorGUILayout.Foldout(jsonVar.enablePartName, "Part Name", true);
+        if (jsonVar.enablePartName)
+        {
+            ++EditorGUI.indentLevel;
+            OnGUIPartName();
+            --EditorGUI.indentLevel;
+        }
+        --EditorGUI.indentLevel;
         EditorGUILayout.Space(spaceHeight);
 
         ColorLabelField("08. Camera View Point Utility", EditorStyles.boldLabel, mainLabelColor);
+        ++EditorGUI.indentLevel;
         if (GUILayout.Button("Select Part Material")) SelectPartMaterial();
         GUILayout.BeginHorizontal();
-        jsonVar.positionMultiple = EditorGUILayout.FloatField(jsonVar.positionMultiple);
-        if (GUILayout.Button("Set Position To Multiple")) SetPositionToMultiple();
+        jsonVar.setMultiple = EditorGUILayout.Toggle("□ Set Multiple", jsonVar.setMultiple);
+        jsonVar.positionMultiple = EditorGUILayout.FloatField("Position", jsonVar.positionMultiple);
+        jsonVar.rotationMultiple = EditorGUILayout.FloatField("Rotation", jsonVar.rotationMultiple);
         GUILayout.EndHorizontal();
+
         GUILayout.BeginHorizontal();
-        jsonVar.rotationMultiple = EditorGUILayout.FloatField(jsonVar.rotationMultiple);
-        if (GUILayout.Button("Set Rotation To Multiple")) SetRotationToMultiple();
+        jsonVar.createViewPointCamera = EditorGUILayout.Toggle("□ Create View Point Camera", jsonVar.createViewPointCamera);
+        if (GUILayout.Button("Destroy View Point Camera")) DestroyCamera(viewPointCameraName);
         GUILayout.EndHorizontal();
-        GUILayout.BeginHorizontal();
-        if (GUILayout.Button("Create View Point Camera")) CreateViewPointCamera();
-        if (GUILayout.Button("Delete View Point Camera")) DeleteViewPointCamera();
-        GUILayout.EndHorizontal();
+
+        if (GUILayout.Button("Set Camera View Point")) SetCameraViewPoint();
+        --EditorGUI.indentLevel;
+        EditorGUILayout.Space(spaceHeight);
+
         EditorGUILayout.EndScrollView();
     }
 
@@ -360,7 +397,7 @@ public class CreateBundleCar : EditorWindow
     /* Config Json을 불러오는 함수 */
     private void LoadConfigJson()
     {
-        TextAsset configJson = AssetDatabase.LoadAssetAtPath<TextAsset>(GetAssetDirectoryPath(GetType().Name + ".cs").Replace(Application.dataPath, "Assets") + '/' + configJsonName + ".json");
+        TextAsset configJson = AssetDatabase.LoadAssetAtPath<TextAsset>(GetAssetDirectoryPath(GetType().Name + ".cs").Replace(Application.dataPath, "Assets") + '/' + GetType().Name + ".json");
         if (!configJson) return;
 
         jsonVar = JsonUtility.FromJson<JsonVar>(configJson.text);
@@ -369,7 +406,7 @@ public class CreateBundleCar : EditorWindow
     /* Config Json을 저장하는 함수 */
     private void SaveConfigJson()
     {
-        File.WriteAllText(GetAssetDirectoryPath(GetType().Name + ".cs") + '/' + configJsonName + ".json", JsonUtility.ToJson(jsonVar));
+        File.WriteAllText(GetAssetDirectoryPath(GetType().Name + ".cs") + '/' + GetType().Name + ".json", JsonUtility.ToJson(jsonVar));
         AssetDatabase.Refresh();
     }
 
@@ -546,13 +583,6 @@ public class CreateBundleCar : EditorWindow
     #endregion
 
     #region 06. Create Paint Info Objects
-    /* Selection Object들을 GUI에 나타내는 함수 */
-    private void OnGUISelectionObjects()
-    {
-        for (int i = 0, l = Selection.objects.Length; i < l; ++i)
-            EditorGUILayout.LabelField(string.Format(" {0:00} : {1}", i, Selection.objects[i].name), EditorStyles.largeLabel);
-    }
-
     /* Paint Info 오브젝트들을 생성하는 함수 */
     private void CreatePaintInfoObjects()
     {
@@ -982,68 +1012,64 @@ public class CreateBundleCar : EditorWindow
         Selection.activeObject = Utility.FindMaterialWithName(meshRenderer.sharedMaterials, so.FindProperty("partMaterialName").stringValue);
     }
 
-    private void SetPositionToMultiple()
+    private Vector3 GetMultipleValue(Vector3 value, float multiple)
     {
-        Transform activeTransform = Selection.activeTransform;
-        if (!activeTransform) return;
+        if (Mathf.Abs(value.x) % multiple < multiple * 0.5f) value.x += ((value.x > 0) ? -1 : 1) * Mathf.Abs(value.x) % multiple;
+        else value.x += ((value.x > 0) ? 1 : -1) * (multiple - Mathf.Abs(value.x) % multiple);
 
-        Vector3 pos = activeTransform.localPosition;
+        if (Mathf.Abs(value.y) % multiple < multiple * 0.5f) value.y += ((value.y > 0) ? -1 : 1) * Mathf.Abs(value.y) % multiple;
+        else value.y += ((value.y > 0) ? 1 : -1) * (multiple - Mathf.Abs(value.y) % multiple);
 
-        if (Mathf.Abs(pos.x) % jsonVar.positionMultiple < jsonVar.positionMultiple * 0.5f) pos.x += ((pos.x > 0) ? -1 : 1) * Mathf.Abs(pos.x) % jsonVar.positionMultiple;
-        else pos.x += ((pos.x > 0) ? 1 : -1) * (jsonVar.positionMultiple - Mathf.Abs(pos.x) % jsonVar.positionMultiple);
+        if (Mathf.Abs(value.z) % multiple < multiple * 0.5f) value.z += ((value.z > 0) ? -1 : 1) * Mathf.Abs(value.z) % multiple;
+        else value.z += ((value.z > 0) ? 1 : -1) * (multiple - Mathf.Abs(value.z) % multiple);
 
-        if (Mathf.Abs(pos.y) % jsonVar.positionMultiple < jsonVar.positionMultiple * 0.5f) pos.y += ((pos.y > 0) ? -1 : 1) * Mathf.Abs(pos.y) % jsonVar.positionMultiple;
-        else pos.y += ((pos.y > 0) ? 1 : -1) * (jsonVar.positionMultiple - Mathf.Abs(pos.y) % jsonVar.positionMultiple);
-
-        if (Mathf.Abs(pos.z) % jsonVar.positionMultiple < jsonVar.positionMultiple * 0.5f) pos.z += ((pos.z > 0) ? -1 : 1) * Mathf.Abs(pos.z) % jsonVar.positionMultiple;
-        else pos.z += ((pos.z > 0) ? 1 : -1) * (jsonVar.positionMultiple - Mathf.Abs(pos.z) % jsonVar.positionMultiple);
-
-        activeTransform.position = pos;
+        return value;
     }
 
-    private void SetRotationToMultiple()
+    private void CreateCamera(Transform cameraTarget, Vector3 offset, string cameraName)
     {
-        Transform activeTransform = Selection.activeTransform;
-        if (!activeTransform) return;
+        if (!cameraTarget) return;
 
-        Vector3 rot = activeTransform.localEulerAngles;
-
-        if (Mathf.Abs(rot.x) % jsonVar.rotationMultiple < jsonVar.rotationMultiple * 0.5f) rot.x += ((rot.x > 0) ? -1 : 1) * Mathf.Abs(rot.x) % jsonVar.rotationMultiple;
-        else rot.x += ((rot.x > 0) ? 1 : -1) * (jsonVar.rotationMultiple - Mathf.Abs(rot.x) % jsonVar.rotationMultiple);
-
-        if (Mathf.Abs(rot.y) % jsonVar.rotationMultiple < jsonVar.rotationMultiple * 0.5f) rot.y += ((rot.y > 0) ? -1 : 1) * Mathf.Abs(rot.y) % jsonVar.rotationMultiple;
-        else rot.y += ((rot.y > 0) ? 1 : -1) * (jsonVar.rotationMultiple - Mathf.Abs(rot.y) % jsonVar.rotationMultiple);
-
-        if (Mathf.Abs(rot.z) % jsonVar.rotationMultiple < jsonVar.rotationMultiple * 0.5f) rot.z += ((rot.z > 0) ? -1 : 1) * Mathf.Abs(rot.z) % jsonVar.rotationMultiple;
-        else rot.z += ((rot.z > 0) ? 1 : -1) * (jsonVar.rotationMultiple - Mathf.Abs(rot.z) % jsonVar.rotationMultiple);
-
-        activeTransform.localEulerAngles = rot;
-    }
-
-    private void CreateViewPointCamera()
-    {
-        Transform activeTransform = Selection.activeTransform;
-        if (!activeTransform) return;
-
-        PaintInfo paintInfo = activeTransform.GetComponent<PaintInfo>();
-        if (!paintInfo) return;
-
-        GameObject viewPointCamera = GameObject.Find(viewPointCameraName);
-        if (!viewPointCamera)
+        GameObject camera = GameObject.Find(cameraName);
+        if (!camera)
         {
-            viewPointCamera = new GameObject(viewPointCameraName);
-            Camera viewPointCameraCamera = viewPointCamera.AddComponent<Camera>();
-            viewPointCameraCamera.depth = 100;
+            camera = new GameObject(cameraName);
+            Camera cameraCamera = camera.AddComponent<Camera>();
+            cameraCamera.depth = 100;
         }
 
-        SerializedObject so = new SerializedObject(paintInfo);
-        viewPointCamera.transform.SetPositionAndRotation(activeTransform.TransformPoint(so.FindProperty("cameraViewPointOffset").vector3Value), activeTransform.rotation);
+        camera.transform.SetPositionAndRotation(cameraTarget.TransformPoint(offset), cameraTarget.rotation);
     }
 
-    private void DeleteViewPointCamera()
+    private void DestroyCamera(string cameraName)
     {
-        GameObject viewPointCamera = GameObject.Find(viewPointCameraName);
-        if (viewPointCamera) DestroyImmediate(viewPointCamera);
+        GameObject camera = GameObject.Find(cameraName);
+        if (camera) DestroyImmediate(camera);
+    }
+
+    private void SetCameraViewPoint()
+    {
+        Transform activeTransform = Selection.activeTransform;
+        if (!activeTransform) return;
+
+        Transform sceneViewCamera = SceneView.lastActiveSceneView.camera.transform;
+
+        if (jsonVar.setMultiple)
+        {
+            activeTransform.localPosition = GetMultipleValue(sceneViewCamera.localPosition, jsonVar.positionMultiple);
+            activeTransform.localEulerAngles = GetMultipleValue(sceneViewCamera.localEulerAngles, jsonVar.rotationMultiple);
+        }
+        else
+        {
+            activeTransform.localPosition = sceneViewCamera.localPosition;
+            activeTransform.localEulerAngles = sceneViewCamera.localEulerAngles;
+        }
+
+        if (jsonVar.createViewPointCamera)
+        {
+            PaintInfo paintInfo = activeTransform.GetComponent<PaintInfo>();
+            CreateCamera(activeTransform, paintInfo ? new SerializedObject(paintInfo).FindProperty("cameraViewPointOffset").vector3Value : Vector3.zero, viewPointCameraName);
+        }
     }
     #endregion
 }
